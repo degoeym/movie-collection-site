@@ -399,6 +399,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/.idea/
 
 ##
 ## Visual studio for Mac
@@ -475,3 +476,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+backend/.idea/.idea.backend.dir/.idea/encodings.xml
+backend/.idea/.idea.backend.dir/.idea/indexLayout.xml
+backend/.idea/.idea.backend.dir/.idea/vcs.xml

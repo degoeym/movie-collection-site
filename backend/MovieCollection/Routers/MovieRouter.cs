@@ -1,7 +1,7 @@
 ﻿using MovieCollection.Components;
 using MovieCollection.Data.DTOs;
-using MovieCollection.Data.Models;
 using MovieCollection.Operations;
+using static Microsoft.AspNetCore.Http.TypedResults;
 
 namespace MovieCollection.Routers;
 
@@ -29,44 +29,44 @@ public class MovieRouter : RouterBase
 
     protected async virtual Task<IResult> GetMovie(Guid id)
     {
-        return TypedResults.Ok(await _operations.GetMovieAsync(id));
+        return Ok(await _operations.GetMovieAsync(id));
     }
 
     protected async virtual Task<IResult> GetAllMovies()
     {
-        return TypedResults.Ok(await _operations.GetMoviesAsync());
+        return Ok(await _operations.GetMoviesAsync());
     }
 
     protected async virtual Task<IResult> AddMovie(NewMovieDto newMovie)
     {
         var validator = new NewMovieDtoValidator();
-        var result = validator.Validate(newMovie);
+        var result = await validator.ValidateAsync(newMovie);
 
         if (!result.IsValid)
-            return TypedResults.ValidationProblem(result.ToDictionary());
+            return ValidationProblem(result.ToDictionary());
 
         var movie = await _operations.AddMovieAsync(newMovie);
 
-        return TypedResults.Created($"/movies/{movie.Id}", movie);
+        return Created($"/movies/{movie.Id}", movie);
     }
 
     protected async virtual Task<IResult> UpdateMovie(Guid id, UpdateMovieDto updatedMovie)
     {
         var validator = new UpdateMovieDtoValidator();
-        var result = validator.Validate(updatedMovie);
+        var result = await validator.ValidateAsync(updatedMovie);
 
         if (!result.IsValid)
-            return TypedResults.ValidationProblem(result.ToDictionary());
+            return ValidationProblem(result.ToDictionary());
 
         var movie = await _operations.UpdateMovieAsync(id, updatedMovie);
 
-        return movie is Movie ? TypedResults.NoContent() : TypedResults.NotFound();
+        return movie is not null ? NoContent() : NotFound();
     }
 
     protected async virtual Task<IResult> DeleteMovie(Guid id)
     {
         var deletedMovie = await _operations.DeleteMovieAsync(id);
 
-        return deletedMovie is Movie ? TypedResults.Ok(deletedMovie) : TypedResults.NotFound();
+        return deletedMovie is not null ? Ok(deletedMovie) : NotFound();
     }
 }
