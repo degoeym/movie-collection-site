@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MovieCollection.Data;
 using MovieCollection.Data.DTOs;
 using MovieCollection.Data.Models;
+using MovieCollection.Mappers;
 
 namespace MovieCollection.Operations;
 
@@ -18,17 +18,16 @@ public interface IMovieOperations
 public class MovieOperations : IMovieOperations
 {
     private readonly MovieCollectionContext _context;
-    private readonly IMapper _mapper;
 
-    public MovieOperations(MovieCollectionContext context, IMapper mapper)
+    public MovieOperations(MovieCollectionContext context)
     {
         _context = context;
-        _mapper = mapper;
     }
 
     public async Task<Movie> AddMovieAsync(NewMovieDto newMovie)
     {
-        var movie = _mapper.Map<Movie>(newMovie);
+        var mapper = new MovieMapper();
+        var movie = mapper.NewMovieDtoToMovie(newMovie);
         movie.CreatedAt = DateTime.UtcNow;
         movie.UpdatedAt = DateTime.UtcNow;
 
@@ -58,7 +57,8 @@ public class MovieOperations : IMovieOperations
         if (originalMovie is null)
             return null;
 
-        _mapper.Map(updatedMovie, originalMovie);
+        var mapper = new MovieMapper();
+        mapper.UpdateMovieFromDto(updatedMovie, originalMovie);
         originalMovie.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 

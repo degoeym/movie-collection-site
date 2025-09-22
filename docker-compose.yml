@@ -25,6 +25,7 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=Host=movie-collection-db;Port=5432;Database=movie_collection_db;Username=postgres;Password=postgres
       - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - movie-collection-db
     networks:

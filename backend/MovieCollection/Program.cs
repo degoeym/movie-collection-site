@@ -1,10 +1,8 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using MovieCollection.Components;
 using MovieCollection.Data;
 using MovieCollection.Operations;
-using MovieCollection.Profiles;
 using MovieCollection.Routers;
 using System.Text.Json.Serialization;
 
@@ -19,14 +17,6 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddScoped<IMovieOperations, MovieOperations>();
 builder.Services.AddScoped<RouterBase, MovieRouter>();
 
-var mappingConfig = new MapperConfiguration(mc =>
-{
-    mc.AddProfile(new MovieCollectionProfile());
-});
-
-var autoMapper = mappingConfig.CreateMapper();
-builder.Services.AddSingleton(autoMapper);
-
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -36,7 +26,12 @@ builder.Services.Configure<JsonOptions>(
 );
 
 var app = builder.Build();
-var dbContext = app.Services.GetRequiredService<MovieCollectionContext>();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<MovieCollectionContext>();
+    db.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
