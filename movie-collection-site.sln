@@ -4,9 +4,9 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieCollection", "backend\MovieCollection\MovieCollection.csproj", "{272C22FC-B859-3F4E-CE73-8ED17D8B358C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieCollection", "backend\MovieCollection\MovieCollection.csproj", "{272C22FC-B859-3F4E-CE73-8ED17D8B358C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieCollection.Tests", "backend\MovieCollection.Tests\MovieCollection.Tests.csproj", "{DEB755A1-5F81-906C-7D9D-BE55F28B9F7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieCollection.Tests", "backend\MovieCollection.Tests\MovieCollection.Tests.csproj", "{DEB755A1-5F81-906C-7D9D-BE55F28B9F7C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -28,8 +28,8 @@ public class MovieOperations : IMovieOperations
     {
         var mapper = new MovieMapper();
         var movie = mapper.NewMovieDtoToMovie(newMovie);
-        movie.CreatedAt = DateTime.UtcNow;
-        movie.UpdatedAt = DateTime.UtcNow;
+        movie.CreatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
+        movie.UpdatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
 
         _context.Movies.Add(movie);
         await _context.SaveChangesAsync();
@@ -59,7 +59,7 @@ public class MovieOperations : IMovieOperations
 
         var mapper = new MovieMapper();
         mapper.UpdateMovieFromDto(updatedMovie, originalMovie);
-        originalMovie.UpdatedAt = DateTime.UtcNow;
+        originalMovie.UpdatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
         await _context.SaveChangesAsync();
 
         return originalMovie;
