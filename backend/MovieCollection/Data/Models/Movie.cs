@@ -5,8 +5,8 @@ namespace MovieCollection.Data.Models;
 public record Movie
 {
     public Guid Id { get; set; }
-    public string Title { get; set; } = default!;
-    public string Description { get; set; } = default!;
+    public string Title { get; set; } = null!;
+    public string Description { get; set; } = null!;
     public Rating Rating { get; set; }
     public DateTime ReleaseDate { get; set; }
     public DateTime CreatedAt { get; set; }

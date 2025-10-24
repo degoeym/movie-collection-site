@@ -67,7 +67,7 @@ public class MovieOperations : IMovieOperations
 
     public async Task<Movie?> GetMovieAsync(Guid id)
     {
-        return await _context.Movies.FindAsync(id) is Movie movie ? movie : null;
+        return await _context.Movies.FindAsync(id);
     }
 
     public async Task<IEnumerable<Movie>> GetMoviesAsync()

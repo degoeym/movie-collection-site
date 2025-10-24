@@ -40,7 +40,7 @@ public class MovieRouter : RouterBase
     protected async virtual Task<IResult> AddMovie(NewMovieDto newMovie)
     {
         var validator = new NewMovieDtoValidator();
-        var result = validator.Validate(newMovie);
+        var result = await validator.ValidateAsync(newMovie);
 
         if (!result.IsValid)
             return TypedResults.ValidationProblem(result.ToDictionary());
@@ -53,7 +53,7 @@ public class MovieRouter : RouterBase
     protected async virtual Task<IResult> UpdateMovie(Guid id, UpdateMovieDto updatedMovie)
     {
         var validator = new UpdateMovieDtoValidator();
-        var result = validator.Validate(updatedMovie);
+        var result = await validator.ValidateAsync(updatedMovie);
 
         if (!result.IsValid)
             return TypedResults.ValidationProblem(result.ToDictionary());

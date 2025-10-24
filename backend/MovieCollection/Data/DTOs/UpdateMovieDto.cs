@@ -5,12 +5,10 @@ namespace MovieCollection.Data.DTOs;
 
 public class UpdateMovieDto
 {
-    public string Title { get; set; } = default!;
-    public string Description { get; set; } = default!;
+    public string Title { get; set; } = null!;
+    public string Description { get; set; } = null!;
     public Rating Rating { get; set; }
     public DateTime ReleaseDate { get; set; }
-
-    public UpdateMovieDto() { }
 }
 
 public class UpdateMovieDtoValidator : AbstractValidator<UpdateMovieDto>
