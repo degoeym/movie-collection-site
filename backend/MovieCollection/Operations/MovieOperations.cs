@@ -39,15 +39,14 @@ public class MovieOperations : IMovieOperations
 
     public async Task<Movie?> DeleteMovieAsync(Guid id)
     {
-        if (await _context.Movies.FindAsync(id) is Movie movie)
-        {
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
+        if (await _context.Movies.FindAsync(id) is not { } movie)
+            return null;
 
-            return movie;
-        }
+        _context.Movies.Remove(movie);
+        await _context.SaveChangesAsync();
 
-        return null;
+        return movie;
+
     }
 
     public async Task<Movie?> UpdateMovieAsync(Guid id, UpdateMovieDto updatedMovie)

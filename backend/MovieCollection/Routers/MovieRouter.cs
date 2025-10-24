@@ -1,6 +1,5 @@
 ﻿using MovieCollection.Components;
 using MovieCollection.Data.DTOs;
-using MovieCollection.Data.Models;
 using MovieCollection.Operations;
 
 namespace MovieCollection.Routers;
@@ -17,19 +16,23 @@ public class MovieRouter : RouterBase
 
     public override void AddRoutes(WebApplication app)
     {
-        app.MapGet($"/{UrlFragment}", () => GetAllMovies());
-        app.MapGet($"/{UrlFragment}/{{id:guid}}", (Guid id) => GetMovie(id));
-        app.MapPost($"/{UrlFragment}", (NewMovieDto newMovie) => AddMovie(newMovie));
+        app.MapGet($"/{UrlFragment}", GetAllMovies);
+        app.MapGet($"/{UrlFragment}/{{id:guid}}", GetMovie);
+        app.MapPost($"/{UrlFragment}", AddMovie);
         app.MapPut(
             $"/{UrlFragment}/{{id:guid}}",
-            (Guid id, UpdateMovieDto updatedMovie) => UpdateMovie(id, updatedMovie)
+            UpdateMovie
         );
-        app.MapDelete($"/{UrlFragment}/{{id:guid}}", (Guid id) => DeleteMovie(id));
+        app.MapDelete($"/{UrlFragment}/{{id:guid}}", DeleteMovie);
     }
 
     protected async virtual Task<IResult> GetMovie(Guid id)
     {
-        return TypedResults.Ok(await _operations.GetMovieAsync(id));
+        var movie = await _operations.GetMovieAsync(id);
+
+        return movie is not null
+            ? TypedResults.Ok(movie)
+            : TypedResults.NotFound();
     }
 
     protected async virtual Task<IResult> GetAllMovies()
@@ -58,15 +61,26 @@ public class MovieRouter : RouterBase
         if (!result.IsValid)
             return TypedResults.ValidationProblem(result.ToDictionary());
 
-        var movie = await _operations.UpdateMovieAsync(id, updatedMovie);
-
-        return movie is Movie ? TypedResults.NoContent() : TypedResults.NotFound();
+        try
+        {
+            var movie = await _operations.UpdateMovieAsync(id, updatedMovie);
+            return movie is not null
+                ? TypedResults.NoContent()
+                : TypedResults.NotFound();
+        }
+        catch
+        {
+            // Do not leak internal details; return a generic server error.
+            return TypedResults.Problem("An error occurred while updating the movie.", statusCode: 500);
+        }
     }
 
     protected async virtual Task<IResult> DeleteMovie(Guid id)
     {
         var deletedMovie = await _operations.DeleteMovieAsync(id);
 
-        return deletedMovie is Movie ? TypedResults.Ok(deletedMovie) : TypedResults.NotFound();
+        return deletedMovie is not null
+            ? TypedResults.Ok(deletedMovie)
+            : TypedResults.NotFound();
     }
 }

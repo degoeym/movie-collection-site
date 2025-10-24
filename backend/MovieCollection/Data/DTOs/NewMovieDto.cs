@@ -15,9 +15,17 @@ public class NewMovieDtoValidator : AbstractValidator<NewMovieDto>
 {
     public NewMovieDtoValidator()
     {
-        RuleFor(n => n.Title).NotEmpty();
-        RuleFor(n => n.Description).NotEmpty().MaximumLength(250).NotEqual(n => n.Title);
-        RuleFor(n => n.Rating).NotEmpty();
-        RuleFor(n => n.ReleaseDate).NotEmpty();
+        RuleFor(n => n.Title)
+            .NotEmpty();
+        RuleFor(n => n.Description)
+            .NotEmpty().MaximumLength(250)
+            .NotEqual(n => n.Title)
+                .WithMessage("Description must be different from Title.");
+        RuleFor(n => n.Rating)
+            .NotEmpty()
+            .IsInEnum();
+        RuleFor(n => n.ReleaseDate)
+            .NotEmpty()
+            .LessThanOrEqualTo(DateTime.UtcNow);
     }
 }
