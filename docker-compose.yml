@@ -15,19 +15,37 @@ services:
     networks:
       - movie-collection-net
 
-  movie-collection:
+  movie-collection-backend:
     build:
       context: ./backend/MovieCollection
       dockerfile: Dockerfile
-    container_name: movie-collection-container
     ports:
       - "8080:80"
     environment:
       - ConnectionStrings__DefaultConnection=Host=movie-collection-db;Port=5432;Database=movie_collection_db;Username=postgres;Password=postgres
       - ASPNETCORE_URLS=http://+:80
       - ASPNETCORE_ENVIRONMENT=Development
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/swagger" ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
     depends_on:
       - movie-collection-db
+    networks:
+      - movie-collection-net
+
+  movie-collection-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - API_BASE_URL=http://localhost:8080
+    ports:
+      - "5173:80"
+    depends_on:
+      movie-collection-backend:
+        condition: service_started
     networks:
       - movie-collection-net
 
