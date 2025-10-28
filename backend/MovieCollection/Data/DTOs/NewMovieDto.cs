@@ -26,6 +26,6 @@ public class NewMovieDtoValidator : AbstractValidator<NewMovieDto>
             .IsInEnum();
         RuleFor(n => n.ReleaseDate)
             .NotEmpty()
-            .LessThanOrEqualTo(DateTime.UtcNow);
+            .LessThanOrEqualTo(_ => DateTime.UtcNow);
     }
 }
