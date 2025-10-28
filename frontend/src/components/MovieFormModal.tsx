@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import type { Movie, NewMovieDto, Rating } from '../types'
 import { isApiError } from '../utils/errors'
 
@@ -27,6 +27,11 @@ export default function MovieFormModal({ show, onClose, onSubmit, movie }: Props
   const [error, setError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({})
   const [submitting, setSubmitting] = useState(false)
+  const formId = useId()
+  const titleId = `${formId}-title`
+  const descriptionId = `${formId}-description`
+  const ratingId = `${formId}-rating`
+  const releaseDateId = `${formId}-release`
 
   useEffect(() => {
     if (movie) {
@@ -95,13 +100,14 @@ export default function MovieFormModal({ show, onClose, onSubmit, movie }: Props
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
               {error && (
-                <div className="alert alert-danger" style={{ whiteSpace: 'pre-wrap' }}>
+                <div className="alert alert-danger" role="alert" style={{ whiteSpace: 'pre-wrap' }}>
                   {error}
                 </div>
               )}
               <div className="mb-3">
-                <label className="form-label">Title</label>
+                <label className="form-label" htmlFor={titleId}>Title</label>
                 <input
+                  id={titleId}
                   className={`form-control ${fieldErrors.title?.length ? 'is-invalid' : ''}`}
                   value={title}
                   onChange={e => setTitle(e.target.value)}
@@ -115,8 +121,9 @@ export default function MovieFormModal({ show, onClose, onSubmit, movie }: Props
                 ) : null}
               </div>
               <div className="mb-3">
-                <label className="form-label">Description</label>
+                <label className="form-label" htmlFor={descriptionId}>Description</label>
                 <textarea
+                  id={descriptionId}
                   className={`form-control ${fieldErrors.description?.length ? 'is-invalid' : ''}`}
                   value={description}
                   onChange={e => setDescription(e.target.value)}
@@ -131,8 +138,9 @@ export default function MovieFormModal({ show, onClose, onSubmit, movie }: Props
               </div>
               <div className="row g-2">
                 <div className="col-md-6">
-                  <label className="form-label">Rating</label>
+                  <label className="form-label" htmlFor={ratingId}>Rating</label>
                   <select
+                    id={ratingId}
                     className={`form-select ${fieldErrors.rating?.length ? 'is-invalid' : ''}`}
                     value={rating}
                     onChange={e => setRating(e.target.value as Rating)}
@@ -150,8 +158,9 @@ export default function MovieFormModal({ show, onClose, onSubmit, movie }: Props
                   ) : null}
                 </div>
                 <div className="col-md-6">
-                  <label className="form-label">Release Date</label>
+                  <label className="form-label" htmlFor={releaseDateId}>Release Date</label>
                   <input
+                    id={releaseDateId}
                     type="date"
                     className={`form-control ${fieldErrors.releaseDate?.length ? 'is-invalid' : ''}`}
                     value={releaseDate}

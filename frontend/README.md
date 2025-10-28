@@ -18,6 +18,15 @@ npm run build
 npm run preview
 ```
 
+Testing (Vitest + Testing Library):
+
+```bash
+npm test
+```
+
+- Unit, component, and integration tests live under `frontend/tests`, mirroring the `src` structure.
+- Run with `npm test -- --coverage` to generate coverage reports in `frontend/coverage`.
+
 Docker build:
 
 ```bash

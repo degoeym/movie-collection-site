@@ -59,7 +59,7 @@ export default function App() {
         <h1 className="h3 m-0">Movie Collection</h1>
         <button className="btn btn-primary" onClick={openAdd}>Add Movie</button>
       </div>
-      {error && <div className="alert alert-danger">{error}</div>}
+  {error && <div className="alert alert-danger" role="alert">{error}</div>}
       {loading ? (
         <div className="text-muted">Loading…</div>
       ) : (
