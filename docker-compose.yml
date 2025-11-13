@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   movie-collection-db:
     image: postgres:17.6
