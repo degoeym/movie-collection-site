@@ -24,6 +24,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<JsonOptions>(
     opt => opt.SerializerOptions.Converters.Add(new JsonStringEnumConverter())
 );
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
 
 var app = builder.Build();
 
@@ -39,6 +46,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 using (var scope = app.Services.CreateScope())
 {
